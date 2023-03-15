@@ -21,7 +21,7 @@ env:
 
 jobs:
   Build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -112,10 +112,10 @@ jobs:
           echo "::set-output name=RELEASE_TAG::$REPO_USER-$REPO_NAME-$REPO_BRANCH"
           df -hT $PWD
 
-      - name: Upload Image To Release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload to Github Releases
+        uses: ncipollo/release-action@v1.11.1
         with:
-          tag_name: ${{ steps.generate.outputs.RELEASE_TAG }}
-          files: output/*
+          commit: "main"
+          tag: ${{ steps.generate.outputs.RELEASE_TAG }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: output/*
