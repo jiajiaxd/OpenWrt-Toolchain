@@ -108,11 +108,17 @@ jobs:
           mv $FILE_NAME output
           echo "::set-output name=RELEASE_TAG::$REPO_USER-$REPO_NAME-$REPO_BRANCH"
           df -hT $PWD
-
-      - name: Upload to Github Releases
-        uses: ncipollo/release-action@v1.11.1
+          
+      - name: Upload firmware directory
+        uses: actions/upload-artifact@main
         with:
-          commit: "main"
-          tag: ${{ steps.generate.outputs.RELEASE_TAG }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: output/*
+          name: ${{ steps.generate.outputs.RELEASE_TAG }}
+          path: output
+
+      # - name: Upload to Github Releases
+      #   uses: ncipollo/release-action@v1.11.1
+      #   with:
+      #     commit: "main"
+      #     tag: ${{ steps.generate.outputs.RELEASE_TAG }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     artifacts: output/*
